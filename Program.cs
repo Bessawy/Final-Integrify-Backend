@@ -1,6 +1,9 @@
+using System;
 using System.Text.Json.Serialization;
 using Ecommerce.Db;
 using Ecommerce.Models;
+using Ecommerce.Services;
+using Ecommerce.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,9 @@ builder.Services.AddDbContext<AppDbContext>();
 // Add configurations
 builder.Services.Configure<PasswordSetting>(
     builder.Configuration.GetSection("PasswordSettings"));
+
+// Add singleton services
+builder.Services.AddSingleton<ICrudService<User, UserDTO>, UserService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

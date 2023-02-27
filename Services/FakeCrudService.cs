@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 
 public class CrudService<TModel, TDTo> : ICrudService<TModel, TDTo>
     where TModel : BaseModel, new()
-    where TDTo : BaseDTO<BaseModel>
+    where TDTo : BaseDTO<TModel>
 {
     private ConcurrentDictionary<int, TModel> _items = new();
     private int _itemId;
