@@ -40,14 +40,14 @@ public class CrudService<TModel, TDTo> : ICrudService<TModel, TDTo>
 
     public ICollection<TModel> GetAll()
     {
-        return _items.Values.ToArray();
+        return _items.Values;
     }
 
     public TModel? Update(int id, TDTo request)
     {
         if(!_items.ContainsKey(id))
             return null;
-            
+
         request.UpdateModel(_items[id]);
         return _items[id];
     }
