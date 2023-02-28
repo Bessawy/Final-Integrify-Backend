@@ -18,8 +18,7 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<AppDbContext>();
 
 // Add configurations
-builder.Services.Configure<PasswordSetting>(
-    builder.Configuration.GetSection("PasswordSettings"));
+
 
 // Add singleton services
 builder.Services.AddSingleton<ICrudService<User, UserDTO>, UserService>();
@@ -36,6 +35,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetService<AppDbContext>();
+        if (dbContext is not null)
+        {
+            dbContext.Database.EnsureDeleted();
+            dbContext.Database.EnsureCreated();
+        }
+    }
     
 }
 
