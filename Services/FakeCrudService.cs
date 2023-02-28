@@ -10,6 +10,8 @@ public class CrudService<TModel, TDTo> : ICrudService<TModel, TDTo>
 {
     private ConcurrentDictionary<int, TModel> _items = new();
     private int _itemId;
+
+    //TODO : email is unquie (Bad request if email is used)
     public TModel? Create(TDTo request)
     {
         if(request == null)
@@ -20,8 +22,13 @@ public class CrudService<TModel, TDTo> : ICrudService<TModel, TDTo>
             Id = Interlocked.Increment(ref _itemId)
         };
 
-        request.UpdateModel(item);
-        return item;
+        if(request.CreateModel(item))
+        {
+            _items[item.Id] = item;
+            return item;
+        }
+
+        return null;
     }
 
     public bool Delete(int id)

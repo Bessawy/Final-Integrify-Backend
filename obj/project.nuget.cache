@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SHHvZ+4RbzTs9Qq7JWjAle9W4rJ+H5pJhGoJhEc2Ml69TnUh5+PpJCNJyJsxrbIrj2+w/S2bJnFjZzqaMbLx0g==",
+  "dgSpecHash": "eqcd3z0qnS8RPlOFCpOa1UGb5pRbpYTB54kIXFvneGUZI9t6Wjn2uAFMgye86Yz1ptvvmEdXjgQ3tz0t3AvDng==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\BackEnd-Integrify-Final.csproj",
+  "projectFilePath": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\Ecommerce.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Amr\\.nuget\\packages\\efcore.namingconventions\\6.0.0\\efcore.namingconventions.6.0.0.nupkg.sha512",
     "C:\\Users\\Amr\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.7\\microsoft.entityframeworkcore.6.0.7.nupkg.sha512",

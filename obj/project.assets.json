@@ -960,9 +960,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\BackEnd-Integrify-Final.csproj",
-      "projectName": "BackEnd-Integrify-Final",
-      "projectPath": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\BackEnd-Integrify-Final.csproj",
+      "projectUniqueName": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\Ecommerce.csproj",
+      "projectName": "Ecommerce",
+      "projectPath": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\Ecommerce.csproj",
       "packagesPath": "C:\\Users\\Amr\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\obj\\",
       "projectStyle": "PackageReference",

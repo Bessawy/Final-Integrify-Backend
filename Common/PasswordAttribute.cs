@@ -1,37 +1,34 @@
 namespace Ecommerce.Common;
 
-using Ecommerce.Models;
-using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 public class PasswordAttribute : ValidationAttribute
 {
-    private readonly IOptions<PasswordSetting> _setting;
-    public override bool IsValid(object? value)
+    protected override ValidationResult IsValid(object? value, ValidationContext context)
     {
-        // Password not null
+        bool validPassword = false;
+        string reason = "", Password;
+
         if(value == null)
-            return false;
+            return ValidationResult.Success;
+        
+        Password = value.ToString();
 
-        // Password length greater than minLength,and less than maxlength.
-        // Password contains atleast 1 upper and 1 lower character,
-        // and no white space.
-        var passwd = (string)value;
-        if (passwd.Length >  _setting.Value.MinLength 
-            || passwd.Length < _setting.Value.MaxLength 
-            || !passwd.Any(char.IsUpper) 
-            || !passwd.Any(char.IsLower)
-            || passwd.Contains(" "))
-            return false;
-
-        // Password contains atleast 1 special character.
-        char[] specialChArray = _setting.Value.SpecialChar.ToCharArray();
-        foreach (char ch in specialChArray) {
-            if (passwd.Contains(ch))
-                return true;
-            }
-
-        return false;
+        if (String.IsNullOrEmpty(Password) || Password.Length < 8) 
+            reason = "Your new password must be at least 8 characters long. ";
+        
+        Regex reSymbol = new Regex("[^a-zA-Z0-9]");
+        if (!reSymbol.IsMatch(Password)) 
+            reason +=  "Your new password must contain at least 1 symbol character.";
+        else
+            validPassword = true;
+        
+        if (validPassword) 
+            return ValidationResult.Success;
+        else
+            return new ValidationResult(reason);
     }
+    
 }
