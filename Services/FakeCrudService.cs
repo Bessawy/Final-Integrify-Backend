@@ -54,5 +54,10 @@ public class FakeCrudService<TModel, TDTo> : ICrudService<TModel, TDTo>
         request.UpdateModel(_items[id]);
         return  Task.FromResult<TModel?>(_items[id]);
     }
+
+    public Task<ICollection<TModel>> GetAllAsync(int offset, int limit)
+    {
+        throw new NotImplementedException();
+    }
 }
 

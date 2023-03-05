@@ -17,11 +17,12 @@ public class UserController : CrudController<User, UserDTO>
 
     // ToDo - replace testcase with a valid implementation
     [HttpGet]
-    [QueryParam("status")]
-    public async Task<ActionResult<User?>> GetByStatus([FromQuery] User.UserRole status)
+    [QueryParam("offset", "limit")]
+    public async Task<ActionResult<User?>> GetByStatus([FromQuery] int offset,
+        [FromQuery] int limit)
     {
-        Console.WriteLine(status);
-        var item = await _service.GetAllAsync();
+
+        var item = await _service.GetAllAsync(offset, limit);
         if(item == null)
             return NotFound("Item not found!");
         return Ok(item);

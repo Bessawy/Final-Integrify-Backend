@@ -38,7 +38,17 @@ public class DbCrudService<TModel, TDto> : ICrudService<TModel, TDto>
 
     public async Task<ICollection<TModel>> GetAllAsync()
     {
-        return await _dbContext.Set<TModel>().ToListAsync();
+        return await _dbContext.Set<TModel>()
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<ICollection<TModel>> GetAllAsync(int offset = 0, int limit = 10)
+    {
+        return await _dbContext.Set<TModel>()
+            .Skip(offset)
+            .Take(limit)
+            .ToListAsync();
     }
 
     public async Task<TModel?> GetAsync(int id)

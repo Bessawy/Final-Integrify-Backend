@@ -1,7 +1,5 @@
 namespace Ecommerce.Controllers;
 
-using Ecommerce.Models;
-using Ecommerce.DTOs;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 

@@ -23,6 +23,7 @@ public class AppDbContext : DbContext
     {
         var db_connection = _config.GetConnectionString("DefaultConnection");
         optionsBuilder.UseNpgsql(db_connection)
+            .AddInterceptors(new AppDbContextSaveChangesInterceptor())
             .UseSnakeCaseNamingConvention();
     }
 
@@ -33,7 +34,18 @@ public class AppDbContext : DbContext
 
         // Create index 
         modelBuilder.Entity<User>()
-            .HasIndex(u => u.Email);
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
+        // Set timestamp dafault values
+        var properties = modelBuilder.Model
+            .GetEntityTypes()
+            .SelectMany(t => t.GetProperties())
+            .Where(p => p.ClrType == typeof(DateTime))
+            .Select(p => modelBuilder.Entity(p.DeclaringEntityType.ClrType).Property(p.Name));
+
+        foreach(var p in properties)
+            p.HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         base.OnModelCreating(modelBuilder);
     }
