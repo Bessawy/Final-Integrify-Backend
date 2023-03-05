@@ -21,7 +21,7 @@ builder.Services.AddDbContext<AppDbContext>();
 
 
 // Add singleton services
-builder.Services.AddSingleton<ICrudService<User, UserDTO>, UserService>();
+builder.Services.AddScoped<ICrudService<User, UserDTO>, DbUserService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

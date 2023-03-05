@@ -4,7 +4,7 @@ using Ecommerce.Models;
 using Ecommerce.DTOs;
 using System.Collections.Concurrent;
 
-public class CrudService<TModel, TDTo> : ICrudService<TModel, TDTo>
+public class FakeCrudService<TModel, TDTo> : ICrudService<TModel, TDTo>
     where TModel : BaseModel, new()
     where TDTo : BaseDTO<TModel>
 {
@@ -12,11 +12,8 @@ public class CrudService<TModel, TDTo> : ICrudService<TModel, TDTo>
     private int _itemId;
 
     //TODO : email is unquie (Bad request if email is used)
-    public TModel? Create(TDTo request)
+    public Task<TModel?> CreateAsync(TDTo request)
     {
-        if(request == null)
-            return null;
-
         var item = new TModel
         {
             Id = Interlocked.Increment(ref _itemId)
@@ -25,38 +22,37 @@ public class CrudService<TModel, TDTo> : ICrudService<TModel, TDTo>
         if(request.CreateModel(item))
         {
             _items[item.Id] = item;
-            return item;
+            return Task.FromResult<TModel?>(item);
         }
-
-        return null;
+        return Task.FromResult<TModel?>(null);
     }
 
-    public bool Delete(int id)
+    public Task<bool> DeleteAsync(int id)
     {
         if(_items.ContainsKey(id))
-            return _items.Remove(id, out var _ );
-        return false;
+            return Task.FromResult(_items.Remove(id, out var _ ));
+        return Task.FromResult(false);
     }
 
-    public TModel? Get(int id)
+    public Task<TModel?> GetAsync(int id)
     {
         if(_items.ContainsKey(id))
-            return _items[id];
-        return null;
+            return Task.FromResult<TModel?>(_items[id]);
+        return Task.FromResult<TModel?>(null);
     }
 
-    public ICollection<TModel> GetAll()
+    public Task<ICollection<TModel>> GetAllAsync()
     {
-        return _items.Values;
+        return Task.FromResult<ICollection<TModel>>(_items.Values);
     }
 
-    public TModel? Update(int id, TDTo request)
+    public Task<TModel?> UpdateAsync(int id, TDTo request)
     {
         if(!_items.ContainsKey(id))
-            return null;
+            return Task.FromResult<TModel?>(null);
 
         request.UpdateModel(_items[id]);
-        return _items[id];
+        return  Task.FromResult<TModel?>(_items[id]);
     }
 }
 

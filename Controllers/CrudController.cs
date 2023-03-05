@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 public abstract class CrudController<TModel, TDTo> : ApiControllerBase
 {
-    private readonly ICrudService<TModel, TDTo> _service;
+    protected readonly ICrudService<TModel, TDTo> _service;
 
     public CrudController(ICrudService<TModel, TDTo> service) 
     {  
@@ -15,42 +15,42 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     }
 
     [HttpGet]
-    public ICollection<TModel> GetAll()
+    public async Task<ICollection<TModel>> GetAll()
     {
-        return _service.GetAll();
+        return await _service.GetAllAsync();
     } 
     
     [HttpGet("{id:int}")]
-    public ActionResult<TModel?> Get(int id)
+    public async Task<ActionResult<TModel?>> Get(int id)
     {
-        var item = _service.Get(id);
+        var item = await _service.GetAsync(id);
         if(item == null)
             return NotFound("Item not found!");
         return Ok(item);
     }
 
     [HttpPost]
-    public virtual ActionResult<TModel?> Create(TDTo request)
+    public virtual async Task<ActionResult<TModel?>> Create(TDTo request)
     {
-        var item = _service.Create(request);
+        var item = await _service.CreateAsync(request);
         if(item == null)
             return BadRequest();
         return Ok(item);
     }
 
     [HttpDelete("{id:int}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        if(_service.Delete(id))
+        if(await _service.DeleteAsync(id))
             return Ok(new {Message = "Item is deleted"});
         else    
             return NotFound("Item not found!");
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<TModel?> Update(int id, TDTo request)
+    public async Task<ActionResult<TModel?>> Update(int id, TDTo request)
     {
-        var item = _service.Update(id, request);
+        var item = await _service.UpdateAsync(id, request);
         if(item == null)
             return NotFound("Item not found!");
         else 
