@@ -9,10 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Add JsonStringEnumCoverter option.
+// Ignore Cycle created from relationships.
 builder.Services.AddControllers()
-    .AddJsonOptions(option => option.JsonSerializerOptions
-    .Converters
-    .Add(new JsonStringEnumConverter()));
+    .AddJsonOptions(options => 
+    {
+        options.JsonSerializerOptions.Converters
+            .Add(new JsonStringEnumConverter());   
+        options.JsonSerializerOptions.ReferenceHandler 
+            = ReferenceHandler.IgnoreCycles;
+    });
 
 // Add databases context
 builder.Services.AddDbContext<AppDbContext>();
@@ -22,6 +27,7 @@ builder.Services.AddDbContext<AppDbContext>();
 
 // Add singleton services
 builder.Services.AddScoped<ICrudService<User, UserDTO>, DbUserService>();
+builder.Services.AddScoped<ICrudService<Product, ProductDTO>, DbProductService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -38,13 +44,15 @@ if (app.Environment.IsDevelopment())
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetService<AppDbContext>();
-        if (dbContext is not null)
+        var config = scope.ServiceProvider.GetService<IConfiguration>();
+
+        if (dbContext is not null
+                && config.GetValue<bool>("CreateDbAtStart", false))
         {
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
         }
-    }
-    
+    }  
 }
 
 app.UseHttpsRedirection();

@@ -7,7 +7,12 @@ using Ecommerce.Models;
 public class AppDbContext : DbContext
 {
     private readonly IConfiguration _config;
-    DbSet<User> Users {get; set;} = null!;
+    public DbSet<User> Users {get; set;} = null!;
+    public DbSet<Product> Products {get; set;} = null!;
+    public DbSet<Category> Categories {get; set;} = null!;
+    public DbSet<Course> Courses { get; set; } = null!;
+    public DbSet<Student> Students { get; set; } = null!;
+    public DbSet<Address> Addresses { get; set; } = null!;
 
     public AppDbContext(IConfiguration config) => _config = config;
 
@@ -37,6 +42,16 @@ public class AppDbContext : DbContext
             .HasIndex(u => u.Email)
             .IsUnique();
 
+        // On delete set to Null
+        //modelBuilder.Entity<Product>()
+        //    .HasOne(p => p.Category)
+        //    .WithOne()
+         //   .OnDelete(DeleteBehavior.SetNull);
+
+        // Always Automatic Load category with student (one to one relationship) Not valid!
+        // modelBuilder.Entity<Product>()
+        //    .Navigation(p => p.Category);
+
         // Set timestamp dafault values
         var properties = modelBuilder.Model
             .GetEntityTypes()
@@ -49,6 +64,4 @@ public class AppDbContext : DbContext
 
         base.OnModelCreating(modelBuilder);
     }
-
-
 }

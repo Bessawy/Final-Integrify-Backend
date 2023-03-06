@@ -32,3 +32,6 @@ C:\Users\Amr\Code-File\BackEnd-Integrify-Final\obj\Debug\net6.0\refint\Ecommerce
 C:\Users\Amr\Code-File\BackEnd-Integrify-Final\obj\Debug\net6.0\Ecommerce.pdb
 C:\Users\Amr\Code-File\BackEnd-Integrify-Final\obj\Debug\net6.0\Ecommerce.genruntimeconfig.cache
 C:\Users\Amr\Code-File\BackEnd-Integrify-Final\obj\Debug\net6.0\ref\Ecommerce.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Humanizer.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
