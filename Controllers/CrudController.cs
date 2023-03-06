@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 public abstract class CrudController<TModel, TDTo> : ApiControllerBase
 {
-    protected readonly ICrudService<TModel, TDTo> _service;
+    private readonly ICrudService<TModel, TDTo> _service;
 
     public CrudController(ICrudService<TModel, TDTo> service) 
     {  
@@ -46,7 +46,7 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<TModel?>> Update(int id, TDTo request)
+    public virtual async Task<ActionResult<TModel?>> Update(int id, TDTo request)
     {
         var item = await _service.UpdateAsync(id, request);
         if(item == null)

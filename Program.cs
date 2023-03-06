@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 using Ecommerce.Db;
 using Ecommerce.Models;
@@ -27,7 +26,9 @@ builder.Services.AddDbContext<AppDbContext>();
 
 // Add singleton services
 builder.Services.AddScoped<ICrudService<User, UserDTO>, DbUserService>();
-builder.Services.AddScoped<ICrudService<Product, ProductDTO>, DbProductService>();
+builder.Services.AddScoped<IProductSurvice, DbProductService>();
+builder.Services.AddScoped<ICategorySurvice, DbCategoryService>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

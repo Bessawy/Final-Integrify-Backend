@@ -21,8 +21,7 @@ public class UserDTO : BaseDTO<User>
         model.Name = Name ?? model.Name;
         model.Email = Email ?? model.Email;
         model.Password = Password ?? model.Password;
-        model.Avatar = Avatar ?? "";
-        model.UpdateAt = DateTime.Now;      
+        model.Avatar = Avatar ?? model.Avatar;    
     }
 
     public override bool CreateModel(User model)

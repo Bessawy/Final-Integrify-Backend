@@ -25,7 +25,7 @@ public class DbCrudService<TModel, TDto> : ICrudService<TModel, TDto>
         return null;
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public virtual async Task<bool> DeleteAsync(int id)
     {
         var item = await GetAsync(id);
         if(item is null)
@@ -42,7 +42,7 @@ public class DbCrudService<TModel, TDto> : ICrudService<TModel, TDto>
             .ToListAsync();
     }
 
-    public async Task<ICollection<TModel>> GetAllAsync(int offset = 0, int limit = 10)
+    public virtual async Task<ICollection<TModel>> GetAllAsync(int offset, int limit)
     {
         return await _dbContext.Set<TModel>()
             .Skip(offset)
