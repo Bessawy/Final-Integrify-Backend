@@ -1,4 +1,8 @@
 using System.Text.Json.Serialization;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Ecommerce.Db;
 using Ecommerce.Models;
 using Ecommerce.Services;
@@ -23,9 +27,15 @@ builder.Services.AddDbContext<AppDbContext>();
 
 // Add configurations
 
+// Add Identity
+builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
+    {
+        options.Password.RequireDigit = false;
+    })
+    .AddEntityFrameworkStores<AppDbContext>();
 
 // Add singleton services
-builder.Services.AddScoped<ICrudService<User, UserDTO>, DbUserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductSurvice, DbProductService>();
 builder.Services.AddScoped<ICategorySurvice, DbCategoryService>();
 

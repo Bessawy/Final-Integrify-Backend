@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 public class ProductController : CrudController<Product, ProductDTO>
 {
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<ProductController> _logger;
     private readonly IProductSurvice _service;
 
     public ProductController(IProductSurvice service,
-        ILogger<UserController> logger) : base(service)
+        ILogger<ProductController> logger) : base(service)
     {
         _logger = logger;
         _service = service;

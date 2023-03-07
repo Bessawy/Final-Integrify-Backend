@@ -1,5 +1,6 @@
 namespace Ecommerce.Controllers;
 
+using Ecommerce.Common;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,17 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     public async Task<ICollection<TModel>> GetAll()
     {
         return await _service.GetAllAsync();
+    }
+
+    [HttpGet]
+    [QueryParam("offset", "limit")]
+    public async Task<ActionResult<TModel?>> Get([FromQuery] int offset,
+        [FromQuery] int limit)
+    {
+        var item = await _service.GetAllAsync(offset, limit);
+        if(item == null)
+            return NotFound("Item not found!");
+        return Ok(item);
     } 
     
     [HttpGet("{id:int}")]

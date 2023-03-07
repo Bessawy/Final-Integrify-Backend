@@ -1,23 +1,13 @@
 namespace Ecommerce.Models;
 
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
-public class User : BaseModel
+public class User : IdentityUser<int>
 {
 
-    [MaxLength(64)]
+    [MaxLength(256)]
     public string Name {get; set;} = null!;
 
-    [MaxLength(256)]
-    public string Email {get; set;} = null!;
-    public string Password {get; set;} = null!;
     public string? Avatar {get; set;}
-    public UserRole Role {get; init;} 
-
-    public enum UserRole
-    {
-        Admin,
-        Customer
-    }
-
 }

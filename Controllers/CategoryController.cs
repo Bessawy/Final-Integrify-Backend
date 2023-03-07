@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api/v1/categories")]
 public class CategoryController : CrudController<Category, CategoryDTO>
 {
-    private readonly ILogger<UserController> _logger;
+    private readonly ILogger<CategoryController> _logger;
     private readonly ICategorySurvice _service;
 
     public CategoryController(ICategorySurvice service,
-        ILogger<UserController> logger) : base(service)
+        ILogger<CategoryController> logger) : base(service)
     {
         _logger = logger;
         _service = service;

@@ -2,32 +2,26 @@ namespace Ecommerce.Controllers;
 
 using Ecommerce.Models;
 using Ecommerce.DTOs;
-using Ecommerce.Common;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 
-public class UserController : CrudController<User, UserDTO>
+public class UserContoller : ApiControllerBase
 {
-    private readonly ILogger<UserController> _logger;
-    private readonly ICrudService<User, UserDTO> _service;
+    private readonly IUserService _service;
+    private readonly ILogger<UserContoller> _logger;
 
-    public UserController(ICrudService<User, UserDTO> service,
-        ILogger<UserController> logger) : base(service)
+    UserContoller(IUserService service, ILogger<UserContoller> logger)
     {
-        _logger = logger;
         _service = service;
+        _logger = logger;
     }
 
-    // ToDo - replace testcase with a valid implementation
-    [HttpGet]
-    [QueryParam("offset", "limit")]
-    public async Task<ActionResult<User?>> GetByStatus([FromQuery] int offset,
-        [FromQuery] int limit)
+    [HttpPost("signup")]
+    public async Task<IActionResult> SignUp(UserSignUpRequestDTO request)
     {
-        var item = await _service.GetAllAsync(offset, limit);
-        if(item == null)
-            return NotFound("Item not found!");
-        return Ok(item);
+        var user = await _service.SignUpAsync(request);
+        if(user is null)
+            return BadRequest();
+        return Ok(UserSignUpResponseDTO.FromUser(user));
     }
-
 }
