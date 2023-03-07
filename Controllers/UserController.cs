@@ -5,12 +5,12 @@ using Ecommerce.DTOs;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 
-public class UserContoller : ApiControllerBase
+public class UserController : ApiControllerBase
 {
     private readonly IUserService _service;
-    private readonly ILogger<UserContoller> _logger;
+    private readonly ILogger<UserController> _logger;
 
-    UserContoller(IUserService service, ILogger<UserContoller> logger)
+    public UserController(IUserService service, ILogger<UserController> logger)
     {
         _service = service;
         _logger = logger;
@@ -19,9 +19,9 @@ public class UserContoller : ApiControllerBase
     [HttpPost("signup")]
     public async Task<IActionResult> SignUp(UserSignUpRequestDTO request)
     {
-        var user = await _service.SignUpAsync(request);
-        if(user is null)
-            return BadRequest();
-        return Ok(UserSignUpResponseDTO.FromUser(user));
+        (var user, var result) = await _service.SignUpAsync(request);
+        if(user is null && result is not null)
+            return BadRequest(result.Errors.ToList());
+        return Ok(UserSignUpResponseDTO.FromUser(user!));
     }
 }

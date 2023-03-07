@@ -14,6 +14,6 @@ public static class IdentityConfigExtension
         builder.Entity<IdentityUserClaim<int>>().ToTable("user_claims");
         builder.Entity<IdentityUserLogin<int>>().ToTable("user_logins");
         builder.Entity<IdentityUserToken<int>>().ToTable("user_tokens");
-        builder.Entity<IdentityUserRole<int>>().ToTable("user_Roles");
+        builder.Entity<IdentityUserRole<int>>().ToTable("user_roles");
     }
 }

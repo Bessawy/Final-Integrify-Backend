@@ -35,6 +35,7 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
     .AddEntityFrameworkStores<AppDbContext>();
 
 // Add singleton services
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductSurvice, DbProductService>();
 builder.Services.AddScoped<ICategorySurvice, DbCategoryService>();
