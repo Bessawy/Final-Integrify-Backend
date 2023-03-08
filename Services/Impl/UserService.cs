@@ -10,16 +10,24 @@ public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
     private readonly IRoleService _roleService;
+    private readonly ITokenService _tokenService;
 
-    public UserService(UserManager<User> userManager, IRoleService roleService)
+    public UserService(UserManager<User> userManager, IRoleService roleService
+        , ITokenService tokenService)
     {
         _userManager = userManager;
         _roleService = roleService;
+        _tokenService = tokenService;
     }
 
-    public Task<User?> SignInAsync(UserSignInRequestDTO request)
+    public async Task<UserSignInResponseDTO?> SignInAsync(UserSignInRequestDTO request)
     {
-        throw new NotImplementedException();
+        var user = await FindUserByEmail(request.Email);
+        if(user is null)
+            return null;
+        if(!await _userManager.CheckPasswordAsync(user, request.Password))
+            return null;
+        return _tokenService.GenerateToken(user);
     }
 
     public async Task<User?> FindUserByEmail(string email)

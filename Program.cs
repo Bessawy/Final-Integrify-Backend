@@ -36,6 +36,7 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
 
 // Add singleton services
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductSurvice, DbProductService>();
 builder.Services.AddScoped<ICategorySurvice, DbCategoryService>();

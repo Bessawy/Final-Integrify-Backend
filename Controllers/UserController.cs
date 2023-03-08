@@ -24,4 +24,14 @@ public class UserController : ApiControllerBase
             return BadRequest(result.Errors.ToList());
         return Ok(UserSignUpResponseDTO.FromUser(user!));
     }
+
+    [HttpPost("signin")]
+    public async Task<IActionResult> SignIn(UserSignInRequestDTO request)
+    {
+        var response = await _service.SignInAsync(request);
+        if(response is null)
+            return Unauthorized();
+        else
+            return Ok(response);
+    }
 }
