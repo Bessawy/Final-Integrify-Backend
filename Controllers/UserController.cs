@@ -59,7 +59,7 @@ public class UserController : ApiControllerBase
         return BadRequest();
     }
 
-    [HttpPut("profile")]
+    [HttpPut("profile/info")]
     public async Task<ActionResult<UserDTO?>> UpdateCurrentUserInfo(UserDTO request)
     {
         var user = await GetUserFromToken();
