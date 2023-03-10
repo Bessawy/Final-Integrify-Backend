@@ -16,7 +16,7 @@ public class JwtTokenService : ITokenService
     public JwtTokenService(IConfiguration config) =>
         _config = config;
 
-    public UserAuthResponseDTO GenerateToken(User user)
+    public UserSignInResponseDTO GenerateToken(User user)
     {
 
         // Setting up the payload
@@ -45,7 +45,7 @@ public class JwtTokenService : ITokenService
             signingCredentials: signInSecret);
         var tokenWriter = new JwtSecurityTokenHandler();
 
-        return new UserAuthResponseDTO
+        return new UserSignInResponseDTO
         {
             Token = tokenWriter.WriteToken(token),
             ExpireTime = expiration

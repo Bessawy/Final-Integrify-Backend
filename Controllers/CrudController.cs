@@ -54,8 +54,7 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     }
 
     [HttpDelete("{id:int}")]
-    [Authorize(Policy = "admin")]
-    public async Task<IActionResult> Delete(int id)
+    public virtual async Task<IActionResult> Delete(int id)
     {
         if(await _service.DeleteAsync(id))
             return Ok(new {Message = "Item is deleted"});
@@ -64,7 +63,6 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     }
 
     [HttpPut("{id:int}")]
-    [Authorize(Policy = "admin")]
     public virtual async Task<ActionResult<TModel?>> Update(int id, TDTo request)
     {
         var item = await _service.UpdateAsync(id, request);

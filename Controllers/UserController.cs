@@ -26,7 +26,7 @@ public class UserController : ApiControllerBase
         (var user, var result) = await _service.SignUpAsync(request);
         if(user is null && result is not null)
             return BadRequest(result.Errors.ToList());
-        return Ok(UserSignUpResponseDTO.FromUser(user!));
+        return Ok(UserDTO.FromUser(user!));
     }
 
     [AllowAnonymous]

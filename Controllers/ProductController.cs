@@ -19,6 +19,7 @@ public class ProductController : CrudController<Product, ProductDTO>
         _service = service;
     }
 
+    [Authorize(Policy = "admin")]
     public override async Task<ActionResult<Product?>> Create(ProductDTO request)
     {   
         bool res = await _service.IsForignIDValidAsync(request.CategoryId);
@@ -34,5 +35,11 @@ public class ProductController : CrudController<Product, ProductDTO>
         if(!res)   
             return NotFound("CategoryId not Found");
         return await base.Update(id, request);
+    }
+
+    [Authorize(Policy = "admin")]
+    public override async Task<IActionResult> Delete(int id)
+    {
+        return await base.Delete(id);
     }
 }

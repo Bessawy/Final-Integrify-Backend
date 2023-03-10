@@ -2,7 +2,6 @@ namespace Ecommerce.Services;
 
 using Ecommerce.Models;
 using Ecommerce.DTOs;
-using Ecommerce.Db;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
@@ -20,7 +19,7 @@ public class UserService : IUserService
         _tokenService = tokenService;
     }
 
-    public async Task<UserAuthResponseDTO?> SignInAsync(UserSignInRequestDTO request)
+    public async Task<UserSignInResponseDTO?> SignInAsync(UserSignInRequestDTO request)
     {
         var user = await FindUserByEmailAsync(request.Email);
         if(user is null)
@@ -44,17 +43,19 @@ public class UserService : IUserService
 
     public async Task<(User?, IdentityResult?)> SignUpAsync(UserSignUpRequestDTO request)
     {
+        string role = "customer";
+
         var user = new User
         {
             Name = request.Name,
             UserName = request.Email,
             Email = request.Email,
-            Role = "customer"
+            Role = role
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
-        var roleObj = await _roleService.FindRoleElseCreate("customer");
-        await _userManager.AddToRoleAsync(user, "customer");
+        var roleObj = await _roleService.FindRoleElseCreate(role);
+        await _userManager.AddToRoleAsync(user, role);
 
         if(!result.Succeeded)
             return (null, result);

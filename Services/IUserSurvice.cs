@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 public interface IUserService
 {
     Task<(User?, IdentityResult?)> SignUpAsync(UserSignUpRequestDTO request);
-    Task<UserAuthResponseDTO?> SignInAsync(UserSignInRequestDTO request);
+    Task<UserSignInResponseDTO?> SignInAsync(UserSignInRequestDTO request);
     Task<User?> FindUserByEmailAsync(string email);
     Task<User?> FindUserByIdAsync(string id);
     Task<bool> DeleteAsync(User user);

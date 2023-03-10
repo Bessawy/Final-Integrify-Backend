@@ -41,10 +41,10 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
             .IsUnique();
 
         // On delete set to Null
-        //modelBuilder.Entity<Product>()
-        //    .HasOne(p => p.Category)
-        //    .WithOne()
-         //   .OnDelete(DeleteBehavior.SetNull);
+        modelBuilder.Entity<Product>()
+            .HasOne(p => p.Category)
+            .WithMany(c => c.Products)
+            .OnDelete(DeleteBehavior.SetNull);
 
         // Set all datetime dafault values
         modelBuilder.AddDateTimeDefualtToAll();

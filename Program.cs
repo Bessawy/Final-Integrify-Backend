@@ -82,6 +82,13 @@ builder.Services.AddAuthorization(options =>
             .AddAuthenticationSchemes("admins")
             .RequireRole("admin")
             .Build());
+
+    // used to add customer as well when override a function
+    options.AddPolicy("customer", new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .AddAuthenticationSchemes("customers")
+            .RequireRole("customer")
+            .Build());
 });
 
 
