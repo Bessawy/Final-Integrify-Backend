@@ -4,6 +4,9 @@ using Ecommerce.Models;
 using Ecommerce.DTOs;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 public class UserController : ApiControllerBase
 {
@@ -16,6 +19,7 @@ public class UserController : ApiControllerBase
         _logger = logger;
     }
 
+    [AllowAnonymous]
     [HttpPost("signup")]
     public async Task<IActionResult> SignUp(UserSignUpRequestDTO request)
     {
@@ -25,6 +29,7 @@ public class UserController : ApiControllerBase
         return Ok(UserSignUpResponseDTO.FromUser(user!));
     }
 
+    [AllowAnonymous]
     [HttpPost("signin")]
     public async Task<IActionResult> SignIn(UserSignInRequestDTO request)
     {
@@ -34,4 +39,28 @@ public class UserController : ApiControllerBase
         else
             return Ok(response);
     }
+
+    [AllowAnonymous]
+    [HttpPost("is-avaiable")]
+    public async Task<bool> CheckEmail(EmailDTO request)
+    {
+        var user = await _service.FindUserByEmailAsync(request.Email);
+        if(user == null)
+            return false;
+        return true;
+    }
+
+   [HttpGet]
+   public async Task<ActionResult<UserDTO?>> GetCurrentUser()
+   {
+    var identity = HttpContext.User.Identity as ClaimsIdentity;
+    
+    if(identity != null)
+    {
+        var email = identity.FindFirst(ClaimTypes.Email)!.Value;
+        var user = await _service.FindUserByEmailAsync(email);
+        return Ok(UserDTO.FromUser(user!));
+    }
+    return BadRequest();
+   }
 }

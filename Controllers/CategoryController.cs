@@ -4,6 +4,7 @@ using Ecommerce.Models;
 using Ecommerce.DTOs;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 [Route("api/v1/categories")]
 public class CategoryController : CrudController<Category, CategoryDTO>
@@ -19,6 +20,7 @@ public class CategoryController : CrudController<Category, CategoryDTO>
     }
 
     [HttpGet("{id:int}/products")]
+    [AllowAnonymous]
     public async Task<ICollection<Product>> GetProducts(int id)
     {
         return await _service.GetProductsAsync(id);

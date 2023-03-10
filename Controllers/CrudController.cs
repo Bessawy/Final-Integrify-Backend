@@ -2,7 +2,9 @@ namespace Ecommerce.Controllers;
 
 using Ecommerce.Common;
 using Ecommerce.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 
 public abstract class CrudController<TModel, TDTo> : ApiControllerBase
 {
@@ -14,12 +16,14 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ICollection<TModel>> GetAll()
     {
         return await _service.GetAllAsync();
     }
 
     [HttpGet]
+    [AllowAnonymous]
     [QueryParam("offset", "limit")]
     public async Task<ActionResult<TModel?>> Get([FromQuery] int offset,
         [FromQuery] int limit)
@@ -31,6 +35,7 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     } 
     
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<ActionResult<TModel?>> Get(int id)
     {
         var item = await _service.GetAsync(id);
@@ -49,6 +54,7 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Policy = "admin")]
     public async Task<IActionResult> Delete(int id)
     {
         if(await _service.DeleteAsync(id))
@@ -58,6 +64,7 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Policy = "admin")]
     public virtual async Task<ActionResult<TModel?>> Update(int id, TDTo request)
     {
         var item = await _service.UpdateAsync(id, request);

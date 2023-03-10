@@ -5,6 +5,7 @@ using Ecommerce.DTOs;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 public class ProductController : CrudController<Product, ProductDTO>
 {
@@ -26,6 +27,7 @@ public class ProductController : CrudController<Product, ProductDTO>
         return await base.Create(request);
     }
 
+    [Authorize(Policy = "admin")]
     public override async Task<ActionResult<Product?>> Update(int id, ProductDTO request)
     {
         bool res = await _service.IsForignIDValidAsync(request.CategoryId);

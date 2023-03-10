@@ -6,4 +6,5 @@ using Ecommerce.DTOs;
 public interface ITokenService
 {
     UserSignInResponseDTO GenerateToken(User user);
+    JwtTokenSetting GetTokenSetting(string role);
 }

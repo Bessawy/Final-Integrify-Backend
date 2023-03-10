@@ -8,6 +8,6 @@ public interface IUserService
 {
     Task<(User?, IdentityResult?)> SignUpAsync(UserSignUpRequestDTO request);
     Task<UserSignInResponseDTO?> SignInAsync(UserSignInRequestDTO request);
-    Task<User?> FindUserByEmail(string email);
-
+    Task<User?> FindUserByEmailAsync(string email);
+    Task<bool> DeleteAsync(string email);
 }

@@ -22,15 +22,17 @@ public class UserService : IUserService
 
     public async Task<UserSignInResponseDTO?> SignInAsync(UserSignInRequestDTO request)
     {
-        var user = await FindUserByEmail(request.Email);
+        var user = await FindUserByEmailAsync(request.Email);
         if(user is null)
             return null;
         if(!await _userManager.CheckPasswordAsync(user, request.Password))
             return null;
+        var role = await _userManager.GetRolesAsync(user);
+        user.Role = role[0];
         return _tokenService.GenerateToken(user);
     }
 
-    public async Task<User?> FindUserByEmail(string email)
+    public async Task<User?> FindUserByEmailAsync(string email)
     {
         return await _userManager.FindByEmailAsync(email);
     }
@@ -54,4 +56,17 @@ public class UserService : IUserService
 
         return (user, result);
     }
+
+    public async Task<bool> DeleteAsync(string email)
+    {   
+        var user = await FindUserByEmailAsync(email);
+        if(user == null)
+            return false;
+        var result = await _userManager.DeleteAsync(user);
+        if(result.Succeeded)
+            return true;
+        return false;
+    }
+
+
 }
