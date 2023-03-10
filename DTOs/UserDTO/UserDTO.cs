@@ -7,9 +7,9 @@ using System.ComponentModel.DataAnnotations;
 public class UserDTO
 {
     public int? Id {get; set;}
-    public string Name {get; set;} = null!;
+    public string? Name {get; set;}
     [EmailAddress]
-    public string Email {get; set;} = null!;
+    public string? Email {get; set;}
     public string? Role {get; set;}
     public string? Avatar {get; set;}
 
@@ -23,5 +23,14 @@ public class UserDTO
             Role = user.Role,
             Avatar = user.Avatar
         };
+    }
+
+    public void Update(User user)
+    {
+        user.Name = Name ?? user.Name;
+        user.Email = Email ?? user.Email;
+        user.Role = Role ?? user.Role;
+        user.UserName = Email ?? user.Email;
+        user.Avatar = Avatar ?? user.Avatar;
     }
 }

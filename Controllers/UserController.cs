@@ -50,17 +50,52 @@ public class UserController : ApiControllerBase
         return true;
     }
 
-   [HttpGet]
+   [HttpGet("profile")]
    public async Task<ActionResult<UserDTO?>> GetCurrentUser()
    {
-    var identity = HttpContext.User.Identity as ClaimsIdentity;
-    
-    if(identity != null)
-    {
-        var email = identity.FindFirst(ClaimTypes.Email)!.Value;
-        var user = await _service.FindUserByEmailAsync(email);
-        return Ok(UserDTO.FromUser(user!));
+        var user = await GetUserFromToken();
+        if(user is not null)
+            return Ok(UserDTO.FromUser(user!));
+        return BadRequest();
     }
-    return BadRequest();
-   }
+
+    [HttpPut("profile")]
+    public async Task<ActionResult<UserDTO?>> UpdateCurrentUserInfo(UserDTO request)
+    {
+        var user = await GetUserFromToken();
+        if(user is null)
+            return BadRequest();
+
+        var updateUser = await _service.UpdateUserInfoAsync(request, user);
+        if(updateUser is null)
+            return BadRequest();
+
+        return Ok(UserDTO.FromUser(updateUser));
+    }
+
+    [HttpPut("profile/password")]
+    public async Task<bool> UpdateCurrentUserPassowrd(ChangePasswordDTO request)
+    {
+        var user = await GetUserFromToken();
+        if(user is null)
+            return false;
+
+        var updateUser = await _service.UpdatePasswordAsync(request, user);
+        return true;
+    }
+
+    public async Task<User?> GetUserFromToken()
+    {
+        var identity = HttpContext.User.Identity as ClaimsIdentity;
+        
+        if(identity != null)
+        {
+            var id = identity.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var user = await _service.FindUserByIdAsync(id);
+            return user;
+        }
+        return null;
+    }
+
+
 }

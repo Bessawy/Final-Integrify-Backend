@@ -1,6 +1,6 @@
 namespace Ecommerce.DTOs;
 
-public class UserSignInResponseDTO
+public class UserAuthResponseDTO
 {
     public string Token {get; set;} = null!;
     public DateTime ExpireTime {get; set;}

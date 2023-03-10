@@ -20,7 +20,7 @@ public class UserService : IUserService
         _tokenService = tokenService;
     }
 
-    public async Task<UserSignInResponseDTO?> SignInAsync(UserSignInRequestDTO request)
+    public async Task<UserAuthResponseDTO?> SignInAsync(UserSignInRequestDTO request)
     {
         var user = await FindUserByEmailAsync(request.Email);
         if(user is null)
@@ -35,6 +35,11 @@ public class UserService : IUserService
     public async Task<User?> FindUserByEmailAsync(string email)
     {
         return await _userManager.FindByEmailAsync(email);
+    }
+
+    public async Task<User?> FindUserByIdAsync(string id)
+    {
+        return await _userManager.FindByIdAsync(id);
     }
 
     public async Task<(User?, IdentityResult?)> SignUpAsync(UserSignUpRequestDTO request)
@@ -57,16 +62,27 @@ public class UserService : IUserService
         return (user, result);
     }
 
-    public async Task<bool> DeleteAsync(string email)
+    public async Task<bool> DeleteAsync(User user)
     {   
-        var user = await FindUserByEmailAsync(email);
-        if(user == null)
-            return false;
         var result = await _userManager.DeleteAsync(user);
         if(result.Succeeded)
             return true;
         return false;
     }
 
+    public async Task<User?> UpdateUserInfoAsync(UserDTO request, User user)
+    {
+        request.Update(user);
+        var result = await _userManager.UpdateAsync(user);
+        if(result.Succeeded)
+            return user;
+        return null;
+    }
 
+    public async Task<bool> UpdatePasswordAsync(ChangePasswordDTO request, User user)
+    {
+        var result = await _userManager.ChangePasswordAsync(user, 
+            request.NewPassword, request.OldPassword);
+        return result.Succeeded;
+    }
 }
