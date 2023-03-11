@@ -2,21 +2,24 @@ namespace Ecommerce.Services;
 
 using Ecommerce.Models;
 using Ecommerce.DTOs;
+using Ecommerce.Db;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
+    private readonly AppDbContext _dbContext;
     private readonly IRoleService _roleService;
     private readonly ITokenService _tokenService;
 
     public UserService(UserManager<User> userManager, IRoleService roleService
-        , ITokenService tokenService)
+        , ITokenService tokenService, AppDbContext dbContext)
     {
         _userManager = userManager;
         _roleService = roleService;
         _tokenService = tokenService;
+        _dbContext = dbContext;
     }
 
     public async Task<UserSignInResponseDTO?> SignInAsync(UserSignInRequestDTO request)
@@ -24,8 +27,10 @@ public class UserService : IUserService
         var user = await FindUserByEmailAsync(request.Email);
         if(user is null)
             return null;
+
         if(!await _userManager.CheckPasswordAsync(user, request.Password))
             return null;
+            
         var role = await _userManager.GetRolesAsync(user);
         user.Role = role[0];
         return _tokenService.GenerateToken(user);
@@ -43,7 +48,7 @@ public class UserService : IUserService
 
     public async Task<(User?, IdentityResult?)> SignUpAsync(UserSignUpRequestDTO request)
     {
-        string role = "customer";
+        string role = "admin";
 
         var user = new User
         {
@@ -86,4 +91,33 @@ public class UserService : IUserService
             request.NewPassword, request.OldPassword);
         return result.Succeeded;
     }
-}
+
+    public async Task<CartItem?> AddProductToCartAsync(int id, User user)
+    {
+        var product = await _dbContext.Products.FindAsync(id);
+        if(product == null)
+            return null;
+        
+        await _dbContext.Entry(user).Collection(u => u.Carts).LoadAsync();
+        var cartItem = user.Carts.SingleOrDefault(c => c.ProductId == product.Id);
+        
+        if(cartItem is null)
+        {
+            cartItem = new CartItem
+            {
+                Product = product,
+                User = user,
+                Count = 1
+            };
+
+            user.Carts.Add(cartItem);
+        }
+        else
+        {
+            cartItem.Count++;
+        }
+
+        await _dbContext.SaveChangesAsync();
+        return cartItem;
+    }
+}  

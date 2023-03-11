@@ -84,6 +84,24 @@ public class UserController : ApiControllerBase
         return true;
     }
 
+    [HttpPost("{id:int}/cart")]
+    public async Task<ActionResult<CartDTO>> AddToCart(int id)
+    {
+        var user = await GetUserFromToken();
+        if(user is null)
+            return BadRequest();
+
+        var carItem = await _service.AddProductToCartAsync(id, user);
+        if(carItem is null)
+            return BadRequest();
+
+        return new CartDTO
+        {
+            Product = carItem!.Product,
+            Count = carItem.Count
+        };
+    }
+
     public async Task<User?> GetUserFromToken()
     {
         var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -96,6 +114,4 @@ public class UserController : ApiControllerBase
         }
         return null;
     }
-
-
 }

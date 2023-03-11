@@ -17,4 +17,7 @@ public class Product : BaseModel
     
     [Column(TypeName = "jsonb")]
     public ICollection<string> Images {get; set;} = null!; 
+
+    [JsonIgnore]
+    public ICollection<CartItem> Carts {get; set;} = null!;
 }
