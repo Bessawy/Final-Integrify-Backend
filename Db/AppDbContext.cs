@@ -13,6 +13,7 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<Product> Products {get; set;} = null!;
     public DbSet<Category> Categories {get; set;} = null!;
     public DbSet<CartItem> Carts {get; set;} = null!;
+    public DbSet<Review> Reviews {get; set;} = null!;
 
     public AppDbContext(IConfiguration config) => _config = config;
 
@@ -43,6 +44,8 @@ public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 
         // Add primary key
         modelBuilder.Entity<CartItem>()
+            .HasKey(c => new {c.UserId, c.ProductId});
+        modelBuilder.Entity<Review>()
             .HasKey(c => new {c.UserId, c.ProductId});
 
         // On delete set to Null

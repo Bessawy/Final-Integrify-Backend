@@ -19,19 +19,17 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
     [AllowAnonymous]
     public async Task<ICollection<TModel>> GetAll()
     {
-        return await _service.GetAllAsync();
+        return await Get(0, 100);
     }
 
     [HttpGet]
     [AllowAnonymous]
     [QueryParam("offset", "limit")]
-    public async Task<ActionResult<TModel?>> Get([FromQuery] int offset,
+    public async Task<ICollection<TModel>> Get([FromQuery] int offset,
         [FromQuery] int limit)
     {
-        var item = await _service.GetAllAsync(offset, limit);
-        if(item == null)
-            return NotFound("Item not found!");
-        return Ok(item);
+        var items = await _service.GetAllAsync(offset, limit);
+        return items;
     } 
     
     [HttpGet("{id:int}")]

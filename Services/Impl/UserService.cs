@@ -91,33 +91,4 @@ public class UserService : IUserService
             request.NewPassword, request.OldPassword);
         return result.Succeeded;
     }
-
-    public async Task<CartItem?> AddProductToCartAsync(int id, User user)
-    {
-        var product = await _dbContext.Products.FindAsync(id);
-        if(product == null)
-            return null;
-        
-        await _dbContext.Entry(user).Collection(u => u.Carts).LoadAsync();
-        var cartItem = user.Carts.SingleOrDefault(c => c.ProductId == product.Id);
-        
-        if(cartItem is null)
-        {
-            cartItem = new CartItem
-            {
-                Product = product,
-                User = user,
-                Count = 1
-            };
-
-            user.Carts.Add(cartItem);
-        }
-        else
-        {
-            cartItem.Count++;
-        }
-
-        await _dbContext.SaveChangesAsync();
-        return cartItem;
-    }
 }  

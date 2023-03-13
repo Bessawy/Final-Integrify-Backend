@@ -14,5 +14,8 @@ public class User : IdentityUser<int>
     [JsonIgnore]
     public ICollection<CartItem> Carts {get; set;} = null!;
 
+    [JsonIgnore]
+    public ICollection<Review> Reviews {get; set;} = null!;
+
     
 }

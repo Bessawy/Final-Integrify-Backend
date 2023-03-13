@@ -5,9 +5,11 @@ using Ecommerce.DTOs;
 using Ecommerce.Db;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 public class DbCategoryService : DbCrudService<Category, CategoryDTO>, ICategorySurvice
 {
+
     public DbCategoryService(AppDbContext dbContext) : base(dbContext)
     {
     }

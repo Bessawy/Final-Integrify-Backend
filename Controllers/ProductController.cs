@@ -4,8 +4,6 @@ using Ecommerce.Models;
 using Ecommerce.DTOs;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
 public class ProductController : CrudController<Product, ProductDTO>
 {
@@ -19,7 +17,6 @@ public class ProductController : CrudController<Product, ProductDTO>
         _service = service;
     }
 
-    [Authorize(Policy = "admin")]
     public override async Task<ActionResult<Product?>> Create(ProductDTO request)
     {   
         bool res = await _service.IsForignIDValidAsync(request.CategoryId);
@@ -28,7 +25,6 @@ public class ProductController : CrudController<Product, ProductDTO>
         return await base.Create(request);
     }
 
-    [Authorize(Policy = "admin")]
     public override async Task<ActionResult<Product?>> Update(int id, ProductDTO request)
     {
         bool res = await _service.IsForignIDValidAsync(request.CategoryId);
@@ -37,9 +33,19 @@ public class ProductController : CrudController<Product, ProductDTO>
         return await base.Update(id, request);
     }
 
-    [Authorize(Policy = "admin")]
     public override async Task<IActionResult> Delete(int id)
     {
         return await base.Delete(id);
+    }
+
+    [Route("search")]
+    public async Task<ICollection<Product>> GetAllBy([FromQuery] int? id, 
+        [FromQuery] string? price,
+        [FromQuery] string? title, 
+        [FromQuery] string? search, 
+        [FromQuery] int offset = 0, 
+        [FromQuery]int limit = 100)
+    {
+        return await _service.GetAllByAsync(offset, limit, id, price, title, search);
     }
 }

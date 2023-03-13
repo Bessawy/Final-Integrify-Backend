@@ -53,7 +53,14 @@ public class UserController : ApiControllerBase
    [HttpGet("profile")]
    public async Task<ActionResult<UserDTO?>> GetCurrentUser()
    {
-        var user = await GetUserFromToken();
+         var userId = GetUserIdFromToken();
+        if(userId is null)
+            return BadRequest();
+        
+        var user = await _service.FindUserByIdAsync(userId);
+        if(user is null)
+            return BadRequest();
+            
         if(user is not null)
             return Ok(UserDTO.FromUser(user!));
         return BadRequest();
@@ -62,7 +69,11 @@ public class UserController : ApiControllerBase
     [HttpPut("profile/info")]
     public async Task<ActionResult<UserDTO?>> UpdateCurrentUserInfo(UserDTO request)
     {
-        var user = await GetUserFromToken();
+        var userId = GetUserIdFromToken();
+        if(userId is null)
+            return BadRequest();
+        
+        var user = await _service.FindUserByIdAsync(userId);
         if(user is null)
             return BadRequest();
 
@@ -76,7 +87,11 @@ public class UserController : ApiControllerBase
     [HttpPut("profile/password")]
     public async Task<bool> UpdateCurrentUserPassowrd(ChangePasswordDTO request)
     {
-        var user = await GetUserFromToken();
+        var userId = GetUserIdFromToken();
+        if(userId is null)
+            return false;
+        
+        var user = await _service.FindUserByIdAsync(userId);
         if(user is null)
             return false;
 
@@ -87,7 +102,11 @@ public class UserController : ApiControllerBase
     [HttpPost("{id:int}/cart")]
     public async Task<ActionResult<CartDTO>> AddToCart(int id)
     {
-        var user = await GetUserFromToken();
+        var userId = GetUserIdFromToken();
+        if(userId is null)
+            return BadRequest();
+        
+        var user = await _service.FindUserByIdAsync(userId);
         if(user is null)
             return BadRequest();
 
@@ -100,18 +119,5 @@ public class UserController : ApiControllerBase
             Product = carItem!.Product,
             Count = carItem.Count
         };
-    }
-
-    public async Task<User?> GetUserFromToken()
-    {
-        var identity = HttpContext.User.Identity as ClaimsIdentity;
-        
-        if(identity != null)
-        {
-            var id = identity.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            var user = await _service.FindUserByIdAsync(id);
-            return user;
-        }
-        return null;
     }
 }

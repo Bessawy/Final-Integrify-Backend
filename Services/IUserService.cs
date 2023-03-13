@@ -13,5 +13,4 @@ public interface IUserService
     Task<bool> DeleteAsync(User user);
     Task<User?> UpdateUserInfoAsync(UserDTO request, User user);
     Task<bool> UpdatePasswordAsync(ChangePasswordDTO request, User user);
-    Task<CartItem?> AddProductToCartAsync(int id, User user); 
 }

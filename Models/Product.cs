@@ -20,4 +20,10 @@ public class Product : BaseModel
 
     [JsonIgnore]
     public ICollection<CartItem> Carts {get; set;} = null!;
+
+    [JsonIgnore]
+    public ICollection<Review> Reviews {get; set;} = null!;
+
+    public double Rating {get; set;} = 0;
+    public int NumberOfReviews {get; set;} = 0;
 }
