@@ -73,7 +73,10 @@ public class ReviewService : IReviewService
         else
             product.NumberOfReviews++;
 
-        product.Rating /= product.NumberOfReviews;
+        if(product.NumberOfReviews == 0)
+            product.Rating = 0;
+        else
+            product.Rating /= product.NumberOfReviews;
     }
 
 }

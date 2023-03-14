@@ -1,4 +1,5 @@
 using Ecommerce.DTOs;
+using Ecommerce.Models;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,4 +20,29 @@ public class ReviewController : ApiControllerBase
         _logger = logger;
     }
 
+
+    [HttpDelete("{id}")]
+    public async Task<bool> DeleteReview(int id)
+    {
+        string? userId = GetUserIdFromToken();
+        if(userId is null)
+            return false;
+
+        return await _service.DeleteReviewAsync(id, userId);
+    } 
+
+    [HttpPost]
+    public async Task<ActionResult<Review>> CreateReview(ReviewDTO request)
+    {
+        string? userId = GetUserIdFromToken();
+        if(userId is null)
+            return BadRequest();
+
+        var review = await _service.AddReviewAsync(request, userId);
+        if(review is null)
+            return BadRequest();
+
+        return Ok(review);
+    } 
 }
+
