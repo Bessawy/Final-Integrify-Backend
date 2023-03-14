@@ -98,26 +98,4 @@ public class UserController : ApiControllerBase
         var updateUser = await _service.UpdatePasswordAsync(request, user);
         return true;
     }
-
-    [HttpPost("{id:int}/cart")]
-    public async Task<ActionResult<CartDTO>> AddToCart(int id)
-    {
-        var userId = GetUserIdFromToken();
-        if(userId is null)
-            return BadRequest();
-        
-        var user = await _service.FindUserByIdAsync(userId);
-        if(user is null)
-            return BadRequest();
-
-        var carItem = await _service.AddProductToCartAsync(id, user);
-        if(carItem is null)
-            return BadRequest();
-
-        return new CartDTO
-        {
-            Product = carItem!.Product,
-            Count = carItem.Count
-        };
-    }
 }

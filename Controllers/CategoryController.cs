@@ -19,6 +19,8 @@ public class CategoryController : CrudController<Category, CategoryDTO>
         _service = service;
     }
 
+    // Product controller with search queries does the same work!
+    // Could remove it completely or Add offset/Limit in the future!
     [HttpGet("{id:int}/products")]
     [AllowAnonymous]
     public async Task<ICollection<Product>> GetProducts(int id)

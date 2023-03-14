@@ -34,3 +34,4 @@ public class UserDTO
         user.Avatar = Avatar ?? user.Avatar;
     }
 }
+
