@@ -33,6 +33,7 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
 
 // Add scoped, transient or singleton services
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 builder.Services.AddScoped<IUserService, UserService>();

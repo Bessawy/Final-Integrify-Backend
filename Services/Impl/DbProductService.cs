@@ -76,4 +76,14 @@ public class DbProductService : DbCrudService<Product, ProductDTO>, IProductSurv
             return false;
         return true;
     }
+
+    public async Task<ICollection<Review>?> GetReviewsAsync(int id)
+    {
+        Product? product = await GetAsync(id);
+        if(product is null)
+            return null;
+        
+        await _dbContext.Entry(product).Collection(p => p.Reviews).LoadAsync();
+        return product.Reviews;
+    }
 }

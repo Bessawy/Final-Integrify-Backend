@@ -38,7 +38,7 @@ public class ProductController : CrudController<Product, ProductDTO>
         return await base.Delete(id);
     }
 
-    [Route("search")]
+    [HttpGet("search")]
     public async Task<ICollection<Product>> GetAllBy([FromQuery] int? id, 
         [FromQuery] string? price,
         [FromQuery] string? title, 
@@ -47,5 +47,14 @@ public class ProductController : CrudController<Product, ProductDTO>
         [FromQuery]int limit = 100)
     {
         return await _service.GetAllByAsync(offset, limit, id, price, title, search);
+    }
+
+    [HttpGet("{id}/reviews")]
+    public async Task<ActionResult<ICollection<Product>>> GetReview(int id)
+    {
+        var res = await _service.GetReviewsAsync(id);
+        if(res is null)
+            return NotFound("product not found");    
+        return Ok(res);
     }
 }
