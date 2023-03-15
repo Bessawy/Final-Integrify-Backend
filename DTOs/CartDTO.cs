@@ -13,6 +13,7 @@ public class CartDTO
         return new CartDTO
         {
             Product = cart.Product,
+            ProductId = cart.ProductId,
             Count = cart.Count
         };
     }
