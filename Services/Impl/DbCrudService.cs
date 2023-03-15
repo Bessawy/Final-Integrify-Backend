@@ -35,13 +35,6 @@ public class DbCrudService<TModel, TDto> : ICrudService<TModel, TDto>
         return true;
     }
 
-    public virtual async Task<ICollection<TModel>> GetAllAsync()
-    {
-        return await _dbContext.Set<TModel>()
-            .AsNoTracking()
-            .ToListAsync();
-    }
-
     public virtual async Task<ICollection<TModel>> GetAllAsync(int offset, int limit)
     {
         return await _dbContext.Set<TModel>()

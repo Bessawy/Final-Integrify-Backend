@@ -17,16 +17,8 @@ public abstract class CrudController<TModel, TDTo> : ApiControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ICollection<TModel>> GetAll()
-    {
-        return await Get(0, 100);
-    }
-
-    [HttpGet]
-    [AllowAnonymous]
-    [QueryParam("offset", "limit")]
-    public async Task<ICollection<TModel>> Get([FromQuery] int offset,
-        [FromQuery] int limit)
+    public async Task<ICollection<TModel>> Get([FromQuery] int offset = 0,
+        [FromQuery] int limit = 100)
     {
         var items = await _service.GetAllAsync(offset, limit);
         return items;

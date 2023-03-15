@@ -4,8 +4,6 @@ using Ecommerce.Models;
 using Ecommerce.DTOs;
 using Ecommerce.Db;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 public class CartService : ICartService
 {

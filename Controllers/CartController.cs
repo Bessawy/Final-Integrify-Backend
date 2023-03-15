@@ -19,16 +19,16 @@ public class CartController : ApiControllerBase
         _logger = logger;
     }
 
-    [HttpPost("add")]
+    [HttpPost("add-item")]
     public async Task<ActionResult<CartDTO>> AddToCart(CartDTO request)
     {
         var userId = GetUserIdFromToken();
         if(userId is null)
-            return BadRequest();
+            return NotFound("Authorized user not found in Database!");
 
         var carItem = await _service.AddProductToCartAsync(request, userId);
         if(carItem is null)
-            return BadRequest();
+            return NotFound();
 
         return new CartDTO
         {
@@ -37,16 +37,16 @@ public class CartController : ApiControllerBase
         };
     }
 
-    [HttpPost("remove")]
+    [HttpPost("remove-item")]
     public async Task<ActionResult<CartDTO>> RemoveFromCart(CartDTO request)
     {
         var userId = GetUserIdFromToken();
         if(userId is null)
-            return BadRequest();
+            return Unauthorized();
 
         var carItem = await _service.RemoveProductFromCartAsync(request, userId);
         if(carItem is null)
-            return BadRequest();
+            return NotFound();
 
         return new CartDTO
         {
@@ -56,11 +56,12 @@ public class CartController : ApiControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<ICollection<CartDTO>>> GetCartItems()
     {
         var userId = GetUserIdFromToken();
         if(userId is null)
-            return BadRequest();
+            return Unauthorized();
 
         return Ok(await _service.GetItemsInCartAsync(userId));
     }

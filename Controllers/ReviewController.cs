@@ -20,15 +20,17 @@ public class ReviewController : ApiControllerBase
         _logger = logger;
     }
 
-
     [HttpDelete("{id}")]
-    public async Task<bool> DeleteReview(int id)
+    public async Task<IActionResult> DeleteReview(int id)
     {
         string? userId = GetUserIdFromToken();
         if(userId is null)
-            return false;
+            return Unauthorized();
 
-        return await _service.DeleteReviewAsync(id, userId);
+        if(await _service.DeleteReviewAsync(id, userId))
+            return Ok(new {Message = "Item is deleted!"});
+        else
+            return NotFound("Item not found!");
     } 
 
     [HttpPost]
@@ -36,7 +38,7 @@ public class ReviewController : ApiControllerBase
     {
         string? userId = GetUserIdFromToken();
         if(userId is null)
-            return BadRequest();
+            return Unauthorized();
 
         var review = await _service.AddReviewAsync(request, userId);
         if(review is null)

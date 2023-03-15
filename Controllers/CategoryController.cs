@@ -20,11 +20,25 @@ public class CategoryController : CrudController<Category, CategoryDTO>
     }
 
     // Product controller with search queries does the same work!
-    // Could remove it completely or Add offset/Limit in the future!
+    // Could remove it completely!
     [HttpGet("{id:int}/products")]
     [AllowAnonymous]
-    public async Task<ICollection<Product>> GetProducts(int id)
+    public async Task<ICollection<Product>> GetProducts(int id, int offset = 0, int limit = 100)
     {
-        return await _service.GetProductsAsync(id);
+        return await _service.GetProductsAsync(id, offset, limit);
+    }
+
+    // Override defualt autherization to only admins
+    [Authorize(Policy = "admin")]
+    public override async Task<IActionResult> Delete(int id)
+    {
+        return await base.Delete(id);
+    }
+
+    // Override defualt autherization to only admins
+    [Authorize(Policy = "admin")]
+    public override async Task<ActionResult<Category?>> Update(int id, CategoryDTO request)
+    {
+        return await base.Update(id, request);
     }
 }

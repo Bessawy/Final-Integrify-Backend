@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 
+// Cannot inherit from CrudSurvicee as User Model can't be used as TModel.
 public class UserController : ApiControllerBase
 {
     private readonly IUserService _service;
@@ -26,7 +27,9 @@ public class UserController : ApiControllerBase
         (var user, var result) = await _service.SignUpAsync(request);
         if(user is null && result is not null)
             return BadRequest(result.Errors.ToList());
-        return Ok(UserDTO.FromUser(user!));
+        else if(user is null)
+            return BadRequest();
+        return Ok(UserDTO.FromUser(user));
     }
 
     [AllowAnonymous]
@@ -50,20 +53,17 @@ public class UserController : ApiControllerBase
         return true;
     }
 
-   [HttpGet("profile")]
-   public async Task<ActionResult<UserDTO?>> GetCurrentUser()
-   {
-         var userId = GetUserIdFromToken();
+    [HttpGet("profile")]
+    public async Task<ActionResult<UserDTO?>> GetCurrentUser()
+    {
+        var userId = GetUserIdFromToken();
         if(userId is null)
-            return BadRequest();
+            return Unauthorized();
         
         var user = await _service.FindUserByIdAsync(userId);
         if(user is null)
-            return BadRequest();
-            
-        if(user is not null)
-            return Ok(UserDTO.FromUser(user!));
-        return BadRequest();
+            return Unauthorized();
+        return Ok(UserDTO.FromUser(user!));
     }
 
     [HttpPut("profile/info")]
@@ -71,31 +71,32 @@ public class UserController : ApiControllerBase
     {
         var userId = GetUserIdFromToken();
         if(userId is null)
-            return BadRequest();
+            return Unauthorized();
         
         var user = await _service.FindUserByIdAsync(userId);
         if(user is null)
-            return BadRequest();
+            return Unauthorized();
 
         var updateUser = await _service.UpdateUserInfoAsync(request, user);
         if(updateUser is null)
             return BadRequest();
-
         return Ok(UserDTO.FromUser(updateUser));
     }
 
     [HttpPut("profile/password")]
-    public async Task<bool> UpdateCurrentUserPassowrd(ChangePasswordDTO request)
+    public async Task<IActionResult> UpdateCurrentUserPassowrd(ChangePasswordDTO request)
     {
         var userId = GetUserIdFromToken();
         if(userId is null)
-            return false;
+            return Unauthorized();
         
         var user = await _service.FindUserByIdAsync(userId);
         if(user is null)
-            return false;
+            return Unauthorized();
 
         var updateUser = await _service.UpdatePasswordAsync(request, user);
-        return true;
+        if(updateUser)
+            return Ok(new {Message = "Password has changed successfully!"});
+        return BadRequest();
     }
 }

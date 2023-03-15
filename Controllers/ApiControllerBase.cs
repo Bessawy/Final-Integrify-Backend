@@ -6,6 +6,7 @@ using System.Net.Mime;
 using System.Security.Claims;
 
 [ApiController]
+[Authorize]
 [Produces(MediaTypeNames.Application.Json)]
 [Consumes(MediaTypeNames.Application.Json)]
 [Route("api/v1/[controller]s")]
@@ -17,8 +18,9 @@ public class ApiControllerBase : ControllerBase
         var identity = HttpContext.User.Identity as ClaimsIdentity;
         if(identity != null)
         {
-            var id = identity.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            return id;
+            var identifer = identity.FindFirst(ClaimTypes.NameIdentifier);
+            if(identifer is not null)
+                return identifer.Value;
         }
         return null;
     }

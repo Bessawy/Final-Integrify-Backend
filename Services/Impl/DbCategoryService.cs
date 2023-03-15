@@ -14,13 +14,18 @@ public class DbCategoryService : DbCrudService<Category, CategoryDTO>, ICategory
     {
     }
 
-    public async Task<ICollection<Product>> GetProductsAsync(int id)
+    public async Task<ICollection<Product>> GetProductsAsync(int id, int offset, int limit)
     {
         Category? category = await GetAsync(id);
         if(category is null)
             return new List<Product>();
-    
-        await _dbContext.Entry(category).Collection(c=> c.Products).LoadAsync();
-        return category.Products;
+  
+        return await _dbContext.Entry(category)
+            .Collection(c=> c.Products)
+            .Query()
+            .AsNoTracking()
+            .Skip(offset)
+            .Take(limit)
+            .ToListAsync();
     }
 }

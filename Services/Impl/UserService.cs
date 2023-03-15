@@ -6,6 +6,7 @@ using Ecommerce.Db;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
+// Independant class since User model inherits from IdentityUser class
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
@@ -48,7 +49,7 @@ public class UserService : IUserService
 
     public async Task<(User?, IdentityResult?)> SignUpAsync(UserSignUpRequestDTO request)
     {
-        string role = "admin";
+        string role = "customer";
 
         var user = new User
         {

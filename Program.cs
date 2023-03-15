@@ -86,6 +86,7 @@ builder.Services.AddAuthorization(options =>
             .Build());
 
     // used to add customer as well when override a function
+    // ----------------------Not used----------------------------
     options.AddPolicy("customer", new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
             .AddAuthenticationSchemes("customers")
