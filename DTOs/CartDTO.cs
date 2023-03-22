@@ -8,7 +8,7 @@ public class CartDTO
     public int ProductId {get; set;}
     public int Count {get; set;}
 
-     public static CartDTO FromCart(CartItem cart)
+    public static CartDTO FromCart(CartItem cart)
     {
         return new CartDTO
         {

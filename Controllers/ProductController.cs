@@ -26,6 +26,8 @@ public class ProductController : CrudController<Product, ProductDTO>
         return await base.Create(request);
     }
 
+    // Override defualt autherization to only admins.
+    // Add check condition for the foreign key.
     [Authorize(Policy = "admin")]
     public override async Task<ActionResult<Product?>> Update(int id, ProductDTO request)
     {
@@ -35,12 +37,16 @@ public class ProductController : CrudController<Product, ProductDTO>
         return await base.Update(id, request);
     }
 
+    // Override defualt autherization to only admins.
+    // Add check condition for the foreign key.
     [Authorize(Policy = "admin")]
     public override async Task<IActionResult> Delete(int id)
     {
         return await base.Delete(id);
     }
 
+    // Allow user to filter by search: string.
+    // Allow user to sort by price: asc|desc and title: asc|desc.
     [AllowAnonymous]
     [HttpGet("search")]
     public async Task<ICollection<Product>> GetAllBy([FromQuery] int? id, 
@@ -53,9 +59,10 @@ public class ProductController : CrudController<Product, ProductDTO>
         return await _service.GetAllByAsync(offset, limit, id, price, title, search);
     }
 
+    // Get reviews for specified product {id}.
     [AllowAnonymous]
     [HttpGet("{id}/reviews")]
-    public async Task<ActionResult<ICollection<Product>>> GetReview(int id,
+    public async Task<ActionResult<ICollection<ReviewDTO>>> GetReviews(int id,
         [FromQuery] int offset = 0, 
         [FromQuery] int limit = 100)
     {

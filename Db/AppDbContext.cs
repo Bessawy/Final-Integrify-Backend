@@ -1,7 +1,6 @@
 namespace Ecommerce.Db;
 
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using Ecommerce.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

@@ -8,13 +8,16 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 public class AppDbContextSaveChangesInterceptor : SaveChangesInterceptor
 {
-
+    // Update the timestamp only when an entity is modified!
     private void UpdateTimeStamp(DbContextEventData eventData)
     {
+        // Get all entries from changeTracker which has entity with a BaseModel
+        // and state that has been modified.
         var entries = eventData.Context!.ChangeTracker
             .Entries()
             .Where(e => e.Entity is BaseModel && (e.State == EntityState.Modified));
         
+        // Update the UpdateAt timestamp for all the returned entries.
         foreach(var entry in entries)
             ((BaseModel)entry.Entity).UpdateAt = DateTime.Now;
         

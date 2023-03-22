@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 public static class IdentityConfigExtension
 {
+    // Override default IdentityUser entity Asp.Net names.
     public static void AddIdentityConfig(this ModelBuilder builder)
     {
         builder.Entity<User>().ToTable("users");

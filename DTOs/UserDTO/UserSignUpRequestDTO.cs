@@ -12,4 +12,6 @@ public class UserSignUpRequestDTO
 
     [Password]
     public string Password {get; set;} = null!;
+
+    public string? Avater {get; set;}
 }

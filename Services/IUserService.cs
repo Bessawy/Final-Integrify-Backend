@@ -3,6 +3,7 @@ namespace Ecommerce.Services;
 using Ecommerce.Models;
 using Ecommerce.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Google.Apis.Auth;
 
 public interface IUserService
 {
@@ -13,4 +14,5 @@ public interface IUserService
     Task<bool> DeleteAsync(User user);
     Task<User?> UpdateUserInfoAsync(UserDTO request, User user);
     Task<bool> UpdatePasswordAsync(ChangePasswordDTO request, User user);
+    Task<UserSignInResponseDTO> GoogleLogInAsync(GoogleJsonWebSignature.Payload payload);
 }

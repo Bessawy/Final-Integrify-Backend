@@ -1,8 +1,11 @@
 namespace Ecommerce.Common;
 
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
+// This Attribute is created to validate Password properties or field.
+// Password length must be more than 5 and less than 10.
+// Password must contain atleast 1 upper character and atleat 1 lower character.
+// Password must contain atlaest one special character.
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 public class PasswordAttribute : ValidationAttribute
 {
@@ -11,6 +14,7 @@ public class PasswordAttribute : ValidationAttribute
         string reason = "";
         string Password;
 
+        // If password is set to null, bypass the validation!
         if(value == null)
             return ValidationResult.Success;
         
@@ -29,8 +33,7 @@ public class PasswordAttribute : ValidationAttribute
             reason += "Password must have atleat 1 lower character. ";
 
         // Password must contain atlaest one special character.
-        Regex reSymbol = new Regex("[^a-zA-Z0-9]");
-        if (!reSymbol.IsMatch(Password)) 
+        if (Password.Any(ch => !char.IsLetterOrDigit(ch)))
             reason +=  "Your new password must contain at least 1 symbol character.";
         
         if (reason == "") 

@@ -10,7 +10,6 @@ namespace Ecommerce.Controllers;
 [Route("api/v1/my-reviews")]
 public class ReviewController : ApiControllerBase
 {
-
     private readonly IReviewService _service;
     private readonly ILogger<ReviewService> _logger;
 
@@ -40,11 +39,32 @@ public class ReviewController : ApiControllerBase
         if(userId is null)
             return Unauthorized();
 
-        var review = await _service.AddReviewAsync(request, userId);
-        if(review is null)
-            return BadRequest();
+        try
+        {
+            var review = await _service.AddReviewAsync(request, userId);
+            if(review is null)
+                return BadRequest();
+            return Ok(review);
+        }
+        catch(Exception e)
+        {
+            // Exception invoked when user tries to create multiple reviews 
+            // for the same product!
+            return BadRequest(e.Message);
+        }
+    }
 
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Review>> GetUserReview(int id)
+    {
+        string? userId = GetUserIdFromToken();
+        if(userId is null)
+            return Unauthorized();
+
+        var review = await _service.GetReviewAsync(id, userId);
+        if(review is null)
+            return NotFound();
         return Ok(review);
-    } 
+    }  
 }
 

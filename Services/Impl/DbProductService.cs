@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class DbProductService : DbCrudService<Product, ProductDTO>, IProductSurvice
 {
+    
     public DbProductService(AppDbContext context) : base(context)
     {
     }
@@ -77,7 +78,7 @@ public class DbProductService : DbCrudService<Product, ProductDTO>, IProductSurv
         return true;
     }
 
-    public async Task<ICollection<Review>?> GetReviewsAsync(int id, int offset, int limit)
+    public async Task<ICollection<ReviewDTO>?> GetReviewsAsync(int id, int offset, int limit)
     {
         Product? product = await GetAsync(id);
         if(product is null)
@@ -88,6 +89,8 @@ public class DbProductService : DbCrudService<Product, ProductDTO>, IProductSurv
             .AsNoTracking()
             .Skip(offset)
             .Take(limit)
+            .Include(r => r.User)
+            .Select(r => ReviewDTO.FromReview(r))
             .ToListAsync();
     }
 }

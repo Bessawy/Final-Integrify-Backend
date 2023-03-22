@@ -3,8 +3,6 @@ namespace Ecommerce.Services;
 using Ecommerce.Models;
 using Ecommerce.DTOs;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
@@ -26,7 +24,7 @@ public class JwtTokenService : ITokenService
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Name, user.Name),
-            new Claim("role", user.Role)
+            new Claim(ClaimTypes.Role, user.Role)
         };
 
         // Get Jwt setting based on user role

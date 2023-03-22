@@ -5,6 +5,7 @@ using Ecommerce.DTOs;
 using Ecommerce.Db;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Google.Apis.Auth;
 
 // Independant class since User model inherits from IdentityUser class
 public class UserService : IUserService
@@ -30,10 +31,11 @@ public class UserService : IUserService
             return null;
 
         if(!await _userManager.CheckPasswordAsync(user, request.Password))
-            return null;
-            
-        var role = await _userManager.GetRolesAsync(user);
-        user.Role = role[0];
+            throw new UnauthorizedAccessException();
+        
+        //-----------------TODO--Remove-Comments------------------
+        // var role = await _userManager.GetRolesAsync(user);
+        // user.Role = role[0];
         return _tokenService.GenerateToken(user);
     }
 
@@ -56,10 +58,18 @@ public class UserService : IUserService
             Name = request.Name,
             UserName = request.Email,
             Email = request.Email,
-            Role = role
+            Role = role,
+            Avatar = request.Avater
         };
 
-        var result = await _userManager.CreateAsync(user, request.Password);
+        IdentityResult result;
+        // If password is empty string - create account with no password!
+        // No password accounts are mainly used for external logins (ex. Google).
+        if(request.Password == "")
+            result = await _userManager.CreateAsync(user);
+        else
+            result = await _userManager.CreateAsync(user, request.Password);
+
         var roleObj = await _roleService.FindRoleElseCreate(role);
         await _userManager.AddToRoleAsync(user, role);
 
@@ -89,7 +99,27 @@ public class UserService : IUserService
     public async Task<bool> UpdatePasswordAsync(ChangePasswordDTO request, User user)
     {
         var result = await _userManager.ChangePasswordAsync(user, 
-            request.NewPassword, request.OldPassword);
+            request.OldPassword, request.NewPassword);
         return result.Succeeded;
+    }
+
+    public async Task<UserSignInResponseDTO> GoogleLogInAsync(GoogleJsonWebSignature.Payload payload)
+    {
+         // if google user is not found, add him/her to the database
+        var user = await FindUserByEmailAsync(payload.Email);
+        if(user == null)
+        {   
+            var res = await SignUpAsync(new UserSignUpRequestDTO 
+            {
+                Email = payload.Email,
+                Name = payload.Name,
+                Password = "",
+                Avater = payload.Picture
+            });
+
+            user = res.Item1;
+        }
+
+        return _tokenService.GenerateToken(user!);
     }
 }  

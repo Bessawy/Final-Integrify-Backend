@@ -1,10 +1,8 @@
 namespace Ecommerce.Controllers;
 
-using Ecommerce.Common;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 
 public abstract class CrudController<TModel, TDTo> : ApiControllerBase
 {

@@ -6,6 +6,7 @@ using Ecommerce.Db;
 using Ecommerce.Models;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Certificate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,7 @@ builder.Services.AddControllers()
 // Add databases context
 builder.Services.AddDbContext<AppDbContext>();
 
-// Add Identity
+// Add Identity and configure options
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
     {
         options.Password.RequireDigit = false;
@@ -40,7 +41,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductSurvice, DbProductService>();
 builder.Services.AddScoped<ICategorySurvice, DbCategoryService>();
 
-// Add authentication for two JWT tokens (users, customers)
+// Add authentication for two JWT tokens (users, customers).
+// Each token has a different secret key.
 builder.Services.AddAuthentication()
 .AddJwtBearer("customers", options => 
 {
@@ -69,29 +71,27 @@ builder.Services.AddAuthentication()
     };
 });
 
+// Add Cetificates for Browsers to trust requests.
+builder.Services.AddAuthentication(
+        CertificateAuthenticationDefaults.AuthenticationScheme)
+    .AddCertificate();
+
 //Add authorization Policies
 builder.Services.AddAuthorization(options =>
 {
-    // validiate one of both as a default using customers then admins tokens
+    // Validiate one of both as a default using customers then admins tokens
     options.DefaultPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .AddAuthenticationSchemes("customers", "admins")
-        .Build();
+        .Build(); 
 
-    // validate admins
-    options.AddPolicy("admin", new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .AddAuthenticationSchemes("admins")
-            .RequireRole("admin")
-            .Build());
-
-    // used to add customer as well when override a function
-    // ----------------------Not used----------------------------
-    options.AddPolicy("customer", new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .AddAuthenticationSchemes("customers")
-            .RequireRole("customer")
-            .Build());
+    // Policy that validates only using admins token
+    options.AddPolicy("admin", policy => 
+    {
+        policy.RequireAuthenticatedUser()
+            .AddAuthenticationSchemes("admins");
+        policy.RequireRole("admin");
+    });
 });
 
 
@@ -107,6 +107,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
+    // Should be used only during development instead of Database migration.
+    // Delete and Create Db.
+    // Set Config.CreateDbAtStart to either true/false.
     using (var scope = app.Services.CreateScope())
     {
         var dbContext = scope.ServiceProvider.GetService<AppDbContext>();

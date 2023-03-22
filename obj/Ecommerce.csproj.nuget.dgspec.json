@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\Ecommerce.csproj": {}
+    "C:\\Users\\Amr\\Code-File\\fs13-FullStack\\backend\\Ecommerce.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\Ecommerce.csproj": {
+    "C:\\Users\\Amr\\Code-File\\fs13-FullStack\\backend\\Ecommerce.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\Ecommerce.csproj",
+        "projectUniqueName": "C:\\Users\\Amr\\Code-File\\fs13-FullStack\\backend\\Ecommerce.csproj",
         "projectName": "Ecommerce",
-        "projectPath": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\Ecommerce.csproj",
+        "projectPath": "C:\\Users\\Amr\\Code-File\\fs13-FullStack\\backend\\Ecommerce.csproj",
         "packagesPath": "C:\\Users\\Amr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\obj\\",
+        "outputPath": "C:\\Users\\Amr\\Code-File\\fs13-FullStack\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -48,6 +48,18 @@
             "EFCore.NamingConventions": {
               "target": "Package",
               "version": "[6.0.0, )"
+            },
+            "Google.Apis.Auth": {
+              "target": "Package",
+              "version": "[1.60.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.Certificate": {
+              "target": "Package",
+              "version": "[6.0.15, )"
+            },
+            "Microsoft.AspNetCore.Authentication.Google": {
+              "target": "Package",
+              "version": "[6.0.15, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",

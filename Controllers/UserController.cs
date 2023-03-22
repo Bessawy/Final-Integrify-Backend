@@ -1,14 +1,12 @@
 namespace Ecommerce.Controllers;
 
-using Ecommerce.Models;
 using Ecommerce.DTOs;
 using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
 
 // Cannot inherit from CrudSurvicee as User Model can't be used as TModel.
+// Basic crud operation is not created for userIdentity Model!
 public class UserController : ApiControllerBase
 {
     private readonly IUserService _service;
@@ -25,10 +23,13 @@ public class UserController : ApiControllerBase
     public async Task<IActionResult> SignUp(UserSignUpRequestDTO request)
     {
         (var user, var result) = await _service.SignUpAsync(request);
+        
+        // Reutrn either empty Badrequest or a list of occured errors if not null!
         if(user is null && result is not null)
             return BadRequest(result.Errors.ToList());
         else if(user is null)
             return BadRequest();
+
         return Ok(UserDTO.FromUser(user));
     }
 
@@ -36,11 +37,18 @@ public class UserController : ApiControllerBase
     [HttpPost("signin")]
     public async Task<IActionResult> SignIn(UserSignInRequestDTO request)
     {
-        var response = await _service.SignInAsync(request);
-        if(response is null)
-            return Unauthorized();
-        else
-            return Ok(response);
+        try
+        {
+            var response = await _service.SignInAsync(request);
+            if(response is null)
+                return NotFound("User email not found!");
+            else
+                return Ok(response);
+        }
+        catch(UnauthorizedAccessException e)
+        {
+            return Unauthorized($"Password is not correct: ({e.Message})!");
+        }
     }
 
     [AllowAnonymous]
@@ -62,11 +70,12 @@ public class UserController : ApiControllerBase
         
         var user = await _service.FindUserByIdAsync(userId);
         if(user is null)
-            return Unauthorized();
-        return Ok(UserDTO.FromUser(user!));
+            return NotFound();
+
+        return Ok(UserDTO.FromUser(user));
     }
 
-    [HttpPut("profile/info")]
+    [HttpPost("profile/info")]
     public async Task<ActionResult<UserDTO?>> UpdateCurrentUserInfo(UserDTO request)
     {
         var userId = GetUserIdFromToken();
@@ -75,15 +84,16 @@ public class UserController : ApiControllerBase
         
         var user = await _service.FindUserByIdAsync(userId);
         if(user is null)
-            return Unauthorized();
+            return NotFound();
 
         var updateUser = await _service.UpdateUserInfoAsync(request, user);
         if(updateUser is null)
             return BadRequest();
+            
         return Ok(UserDTO.FromUser(updateUser));
     }
 
-    [HttpPut("profile/password")]
+    [HttpPost("profile/password")]
     public async Task<IActionResult> UpdateCurrentUserPassowrd(ChangePasswordDTO request)
     {
         var userId = GetUserIdFromToken();
@@ -92,7 +102,7 @@ public class UserController : ApiControllerBase
         
         var user = await _service.FindUserByIdAsync(userId);
         if(user is null)
-            return Unauthorized();
+            return NotFound();
 
         var updateUser = await _service.UpdatePasswordAsync(request, user);
         if(updateUser)

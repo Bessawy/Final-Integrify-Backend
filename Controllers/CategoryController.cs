@@ -19,8 +19,9 @@ public class CategoryController : CrudController<Category, CategoryDTO>
         _service = service;
     }
 
+    // Get products for the specified category {id}
     // Product controller with search queries does the same work!
-    // Could remove it completely!
+    // Could be removed!
     [HttpGet("{id:int}/products")]
     [AllowAnonymous]
     public async Task<ICollection<Product>> GetProducts(int id, int offset = 0, int limit = 100)

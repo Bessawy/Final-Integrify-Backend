@@ -1,4 +1,4 @@
-using Ecommerce.Models;
+namespace Ecommerce.Models;
 
 public class JwtTokenSetting
 {

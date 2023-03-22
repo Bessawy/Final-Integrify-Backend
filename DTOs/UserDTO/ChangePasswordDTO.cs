@@ -1,6 +1,5 @@
 namespace Ecommerce.DTOs;
 
-using System.ComponentModel.DataAnnotations;
 using Ecommerce.Common;
 
 public class ChangePasswordDTO

@@ -9,7 +9,6 @@ namespace Ecommerce.Controllers;
 [Route("api/v1/my-cart")]
 public class CartController : ApiControllerBase
 {
-
     private readonly ICartService _service;
     private readonly ILogger<CartController> _logger;
 
@@ -24,7 +23,7 @@ public class CartController : ApiControllerBase
     {
         var userId = GetUserIdFromToken();
         if(userId is null)
-            return NotFound("Authorized user not found in Database!");
+            return Unauthorized();
 
         var carItem = await _service.AddProductToCartAsync(request, userId);
         if(carItem is null)
@@ -63,6 +62,9 @@ public class CartController : ApiControllerBase
         if(userId is null)
             return Unauthorized();
 
-        return Ok(await _service.GetItemsInCartAsync(userId));
+        var items = await _service.GetItemsInCartAsync(userId);
+        if(items is null)
+            return NotFound();
+        return Ok(items);
     }
 }
