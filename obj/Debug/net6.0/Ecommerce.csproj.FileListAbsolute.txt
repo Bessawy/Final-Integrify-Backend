@@ -105,3 +105,10 @@ C:\Users\Amr\Code-File\fs13-FullStack\backend\bin\Debug\net6.0\Google.Apis.Auth.
 C:\Users\Amr\Code-File\fs13-FullStack\backend\bin\Debug\net6.0\Google.Apis.Auth.dll
 C:\Users\Amr\Code-File\fs13-FullStack\backend\bin\Debug\net6.0\Google.Apis.Core.dll
 C:\Users\Amr\Code-File\fs13-FullStack\backend\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Google.Apis.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Google.Apis.Auth.PlatformServices.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Google.Apis.Auth.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Google.Apis.Core.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.Certificate.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Users\Amr\Code-File\BackEnd-Integrify-Final\bin\Debug\net6.0\Newtonsoft.Json.dll

@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Ecommerce</RootNamespace>
+    <DockerDefaultTargetOs>Linu</DockerDefaultTargetOs>
+    <InvariantGloblization>true</InvariantGloblization>
   </PropertyGroup>
 
   <ItemGroup>

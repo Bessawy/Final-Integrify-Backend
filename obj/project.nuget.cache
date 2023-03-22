@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qLr/WLWcyoLRh7UH6JF+1OyQ/cU0cAvwdqpSEkz6ItUA3qSySJzherAlcOv9fjsYPU9FyeCVYF9ewrlzbj8iFQ==",
+  "dgSpecHash": "5P6W0aU6ph8QpIizetvikMOf+TO/JvcPRC5gifZu/Ygk4WLFbFZKF/b13FzEYwxPvOrk7zrWYdXHr1Gpt6cfUQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Amr\\Code-File\\fs13-FullStack\\backend\\Ecommerce.csproj",
+  "projectFilePath": "C:\\Users\\Amr\\Code-File\\BackEnd-Integrify-Final\\Ecommerce.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Amr\\.nuget\\packages\\efcore.namingconventions\\6.0.0\\efcore.namingconventions.6.0.0.nupkg.sha512",
     "C:\\Users\\Amr\\.nuget\\packages\\google.apis\\1.60.0\\google.apis.1.60.0.nupkg.sha512",
